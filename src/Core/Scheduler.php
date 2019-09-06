@@ -7,10 +7,10 @@
  */
 
 namespace Haixun\Core;
-use Haixun\Http\Request;
+
 use Haixun\Queue\FifoQueue;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UriInterface;
+
 
 /**
  *  处理请求的入队和出队

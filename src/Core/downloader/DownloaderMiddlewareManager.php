@@ -10,9 +10,6 @@ namespace Haixun\Core\Downloader;
 
 
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 
 class DownloaderMiddlewareManager

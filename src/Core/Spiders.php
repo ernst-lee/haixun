@@ -1,19 +1,10 @@
 <?php
-/**
- * This file is part of the wengo/basesdk.
- *
- * (c) basesdk <398711943@qq.com>
- *
- */
 
 namespace Haixun\Core;
 
 
 
 use GuzzleHttp\Psr7\Request;
-use Haixun\Core\Traits\Stats;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class Spiders
 {

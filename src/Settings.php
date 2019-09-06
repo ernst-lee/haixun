@@ -1,24 +1,15 @@
 <?php
-/**
- * This file is part of the wengo/basesdk.
- *
- * (c) basesdk <398711943@qq.com>
- *
- */
-
 namespace Haixun;
 
 use GuzzleHttp\Middleware;
 
 use Haixun\Core\Downloader\Downloader;
 use Haixun\Core\Scheduler;
-use Haixun\Core\Spiders;
 use Haixun\DownloaderMiddlewares\EffectiveUrlMiddleware;
 use Haixun\DownloaderMiddlewares\MetaMiddleware;
 use Haixun\DownloaderMiddlewares\RetryAgentMiddleware;
 use Haixun\DownloaderMiddlewares\UserAgentMiddleware;
 use Haixun\Core\Support\Collection;
-use Haixun\DownloaderMiddlewares\LoggerMiddleware;
 use Monolog\Logger;
 
 class Settings {

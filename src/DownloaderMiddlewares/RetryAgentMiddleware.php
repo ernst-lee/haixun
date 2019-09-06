@@ -1,11 +1,4 @@
 <?php
-/**
- * This file is part of the wengo/basesdk.
- *
- * (c) basesdk <398711943@qq.com>
- *
- */
-
 namespace Haixun\DownloaderMiddlewares;
 
 
@@ -13,10 +6,6 @@ use Closure;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\RetryMiddleware;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class RetryAgentMiddleware {
     /**

@@ -3,11 +3,9 @@
 namespace Haixun\DownloaderMiddlewares;
 
 use Closure;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\TransferStats;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * A class to log HTTP Requests and Responses of Guzzle.
