@@ -42,8 +42,19 @@ class Crawler {
         $this->settings = new Settings($options);
         $this->engine = new Engine($this);
         $this->spider = $spidercls;
-        $this->stats = new Stats();
         $this->spider->setCrawler($this);
+    }
+
+    public function getState() {
+        if(!$this->stats) {
+            $this->stats = new Stats();
+        }
+
+        return $this->stats;
+    }
+
+    public function getConfig() {
+        return $this->settings->getConfig();
     }
 
     /**

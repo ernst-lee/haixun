@@ -2,10 +2,12 @@
 namespace Haixun\Core\Downloader;
 
 
+
 /**
  * 处理下载
  */
 class Downloader {
+
     public $downloaderMiddlewareManager;
 
     /**
@@ -16,6 +18,6 @@ class Downloader {
 
     public function __construct($crawler) {
         $this->crawler = $crawler;
-        $this->downloaderMiddlewareManager = new DownloaderMiddlewareManager($this->crawler->settings->get('DOWNLOAD_MIDDLEWARES'));
+        $this->downloaderMiddlewareManager = new DownloaderMiddlewareManager($this->crawler->getConfig()->get('DOWNLOAD_MIDDLEWARES'));
     }
 }

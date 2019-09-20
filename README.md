@@ -70,3 +70,49 @@ class TheBaseSpider extends \Haixun\Core\Spiders {
 $crawler = new \Haixun\Core\Crawler(new TheBaseSpider());
 $crawler->crawl();
 ```
+
+## DomCrawler Crawler
+
+> 实例化
+```php
+$url = 'https://movie.douban.com/subject/25812712/?from=showing';
+
+$response = file_get_contents($url);
+//进行XPath页面数据抽取
+$data    = []; //结构化数据存本数组
+
+
+$crawler = new Crawler();
+$crawler->addHtmlContent($response);
+
+```
+> 查找元素
+```php
+# xpath
+$crawler->filterXPath('//*[@id="content"]/h1/span[1]')->text();
+$crawler->filterXPath('//*[@id="content"]/h1/span[1]')->html();
+
+# css
+$crawler->filter('#content h1 span')->text();
+$crawler->filter('#content h1 span')->html();
+```
+
+
+> 遍历元素
+```php
+$crawler->filterXPath('//ul[contains(@class,"celebrities-list from-subject")]/li')->each(function (Crawler $node, $i) {
+    $node->attr("class") # 获取属性
+});
+```
+
+> 获取总数
+```php
+$crawler->filter(".item a[href*=items]")->count();
+```
+
+> 遍历所有链接
+```php
+foreach($crawler->filter(".item a[href*=items]")->links() as $link) {
+    echo $link->getUri();
+}
+```

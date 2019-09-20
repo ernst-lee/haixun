@@ -33,7 +33,7 @@ class RetryAgentMiddleware {
 
             // 请求失败，继续重试
             if ($exception instanceof ConnectException || $exception instanceof RequestException) {
-//                echo sprintf(' Retry Crawled <%s %s>', $request->getMethod(), $request->getUri()) . "\n";
+                echo sprintf(' Retry Crawled <%s %s>', $request->getMethod(), $request->getUri()) . "\n";
                 return true;
             } else if($exception != null) {
                 var_dump(get_class($exception));

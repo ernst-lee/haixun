@@ -1,3 +1,11 @@
 /vendor
 
 /demo.php
+
+/dom_demo.php
+
+/di_demo.php
+
+/src/Core/Scheduler_Redis.php
+
+/src/Core/Downloader/Downloader - 副本.php

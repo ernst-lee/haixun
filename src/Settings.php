@@ -29,10 +29,11 @@ class Settings {
             'DOWNLOAD_TIMEOUT'          => 180,
             'CONCURRENT_REQUESTS'       => 16,
             'LOG'                       => Logger::DEBUG,
-            'DEBUG'                     => false,
+            'DEBUG'                     => true,
             'CURL' => [
                 CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             ],
+            'COOKIES_ENABLED' => false,
             'DOWNLOADER'                => Downloader::class,
             'DOWNLOAD_MIDDLEWARES'      => [
                 ['class' => UserAgentMiddleware::class],
@@ -44,10 +45,7 @@ class Settings {
             'SCHEDULER'                 => Scheduler::class,
         ];
 
-        return new Collection(array_replace_recursive($this->defaultConfig, $this->userConfig));
+       return new Collection(array_replace_recursive($this->defaultConfig, $this->userConfig));
     }
 
-    public function __call($name, $arguments) {
-        return $this->getConfig()->get(current($arguments));
-    }
 }

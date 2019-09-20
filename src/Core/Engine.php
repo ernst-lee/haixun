@@ -5,6 +5,7 @@ use Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 
+
 use Haixun\Http\Response;
 use Psr\Http\Message\RequestInterface;
 
@@ -33,8 +34,12 @@ class Engine {
         $this->downloader = $this->createDownloader();
         $this->scheduler = $this->createScheduler();
 
-        $this->httpClient = new Client(['handler' => $this->downloader->downloaderMiddlewareManager->getHandlerStack(), 'debug' => $this->crawler->settings->get('DEBUG'), 'timeout' => $this->crawler->settings->get('DOWNLOAD_TIMEOUT'), 'cookies' => true]);
-
+        $this->httpClient = new Client([
+            'handler' => $this->downloader->downloaderMiddlewareManager->getHandlerStack(),
+            'debug' => $this->crawler->getConfig()->get('DEBUG'),
+            'timeout' => $this->crawler->getConfig()->get('DOWNLOAD_TIMEOUT'),
+            'cookies' => $this->crawler->getConfig()->get('COOKIES_ENABLED')]
+        );
     }
 
     /**
@@ -42,7 +47,7 @@ class Engine {
      * @return \Haixun\Core\Downloader\Downloader
      */
     public function createDownloader() {
-        $downloaderClass = $this->crawler->settings->get('DOWNLOADER');
+        $downloaderClass = $this->crawler->getConfig()->get('DOWNLOADER');
         return new $downloaderClass($this->crawler);
     }
 
@@ -51,8 +56,8 @@ class Engine {
      * @return \Haixun\Core\Scheduler
      */
     public function createScheduler() {
-        $schedulerClass = $this->crawler->settings->get('SCHEDULER');
-        return new $schedulerClass();
+        $schedulerClass = $this->crawler->getConfig()->get('SCHEDULER');
+        return new $schedulerClass($this->crawler);
     }
 
     /**
@@ -61,18 +66,21 @@ class Engine {
     public function openSpider(Spiders $spiers) {
         foreach($spiers->startRequests() as $request) {
             $this->schedule($request);
+            $this->crawler->getState()->setStartTime();
         }
 
         while ($this->scheduler->hasPendingRequest()) {
             $this->next_request();
         }
 
+        $this->crawler->getState()->setEndTime();
         $this->crawler->spider->finish();
+
     }
 
     public function next_request() {
         $pool = new Pool($this->httpClient, $this->scheduler->nextRequest(), [
-            'concurrency' => (int)$this->crawler->settings->get("CONCURRENT_REQUESTS"),
+            'concurrency' => (int)$this->crawler->getConfig()->get("CONCURRENT_REQUESTS"),
 //            'options' => $this->httpClient->getConfig(),
             'fulfilled' => $this->handleDownloadSuccess(),
             'rejected'  => $this->handleDownloaderFailed(),
@@ -88,7 +96,9 @@ class Engine {
      */
     public function handleDownloadSuccess() {
         return function($response, $index) {
-            $this->crawler->stats->set(sprintf('downloader/response_status_count/%s', $response->getStatusCode()));
+//            $this->crawler->stats->set(sprintf('downloader/response_status_count/%s', $response->getStatusCode()));
+            $this->crawler->getState()->addState(sprintf('downloader/response_status_count/%s', $response->getStatusCode()));
+            $this->crawler->getState()->addState('downloader/response_count');
             $response = Response::buildFromPsrResponse($response);
             if($response->getCallBack()) {
                 $next = call_user_func([$this->crawler->spider, $response->getCallBack()], $response, $index);
@@ -110,6 +120,7 @@ class Engine {
     public function handleDownloaderFailed() {
         return function($reason, $index) {
             var_dump($reason->getMessage());
+            $this->crawler->getState()->addState(sprintf('downloader/response_status_count/%s', $reason->getCode()));
             $this->crawler->stats->set(sprintf('downloader/response_status_count/%s', $reason->getCode()));
         };
     }
@@ -118,7 +129,6 @@ class Engine {
      * 推送请求进队列
      */
     public function schedule(RequestInterface $request) {
-        $this->crawler->stats->set('scheduler/enqueued');
         $this->scheduler->enqueueRequest($request);
     }
 }

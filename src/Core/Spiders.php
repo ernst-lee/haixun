@@ -6,8 +6,10 @@ namespace Haixun\Core;
 
 use GuzzleHttp\Psr7\Request;
 
+
 class Spiders
 {
+
     public $startUrls;
     /**
      * crawler
@@ -32,6 +34,6 @@ class Spiders
     }
 
     public function finish() {
-        echo $this->crawler->stats;
+        echo $this->crawler->getState();
     }
 }
