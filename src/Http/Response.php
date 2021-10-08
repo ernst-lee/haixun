@@ -48,6 +48,10 @@ class Response extends GuzzleResponse {
             return $this->getMeta()['callback'];
         }
 
+        if($this->getMeta()) {
+            return current($this->getMeta());
+        }
+
         return null;
     }
 
