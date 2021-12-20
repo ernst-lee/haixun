@@ -38,8 +38,9 @@ class Engine {
             'handler' => $this->downloader->downloaderMiddlewareManager->getHandlerStack(),
             'debug' => $this->crawler->getConfig()->get('DEBUG'),
             'timeout' => $this->crawler->getConfig()->get('DOWNLOAD_TIMEOUT'),
-            'cookies' => $this->crawler->getConfig()->get('COOKIES_ENABLED')]
-        );
+            'cookies' => $this->crawler->getConfig()->get('COOKIES_ENABLED'),
+            'curl'  => $this->crawler->getConfig()->get('CURL'),
+        ]);
     }
 
     /**
@@ -121,7 +122,7 @@ class Engine {
         return function($reason, $index) {
             var_dump($reason->getMessage());
             $this->crawler->getState()->addState(sprintf('downloader/response_status_count/%s', $reason->getCode()));
-            $this->crawler->stats->set(sprintf('downloader/response_status_count/%s', $reason->getCode()));
+//            $this->crawler->stats->set(sprintf('downloader/response_status_count/%s', $reason->getCode()));
         };
     }
 
